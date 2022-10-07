@@ -1,0 +1,59 @@
+{
+    "version": "0.0.0",
+    "name": "TODO",
+    "umd:name": "TODO",
+    "repository": "TODO_USERNAME/TODO_REPO",
+    "description": "TODO_MODULE_DESCRIPTION",
+    "unpkg": "dist/index.min.js",
+    "module": "dist/index.mjs",
+    "main": "dist/index.js",
+    "types": "types/index.d.ts",
+    "license": "MIT",
+    "type": "module",
+    "author": {
+        "name": "Juan de Urtubey",
+        "email": "jdeurt@gmail.com",
+        "url": "https://jdeurt.xyz"
+    },
+    "files": [
+        "dist",
+        "types"
+    ],
+    "exports": {
+        ".": {
+            "import": "./dist/index.mjs",
+            "require": "./dist/index.js"
+        },
+        "./package.json": "./package.json"
+    },
+    "engines": {
+        "node": ">=16"
+    },
+    "scripts": {
+        "build": "rollup -c",
+        "prepublishOnly": "npm run build",
+        "types": "tsc --noEmit",
+        "test": "jest"
+    },
+    "keywords": [
+        "TODO",
+        "module",
+        "keywords"
+    ],
+    "devDependencies": {
+        "@rollup/plugin-node-resolve": "13.1.3",
+        "@types/jest": "^28.1.7",
+        "@typescript-eslint/eslint-plugin": "^5.30.7",
+        "@typescript-eslint/parser": "^5.30.7",
+        "eslint": "^8.20.0",
+        "eslint-config-prettier": "^8.5.0",
+        "eslint-plugin-unicorn": "^43.0.2",
+        "jest": "^28.1.3",
+        "prettier": "^2.7.1",
+        "rollup": "2.66.1",
+        "rollup-plugin-terser": "7.0.2",
+        "rollup-plugin-typescript2": "0.27.1",
+        "ts-jest": "^28.0.8",
+        "typescript": "4.5.5"
+    }
+}
