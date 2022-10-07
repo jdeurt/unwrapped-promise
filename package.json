@@ -16,8 +16,8 @@
         "url": "https://jdeurt.xyz"
     },
     "files": [
-        "unwrapped",
-        "promise"
+        "dist",
+        "types"
     ],
     "exports": {
         ".": {
@@ -36,9 +36,8 @@
         "test": "jest"
     },
     "keywords": [
-        "TODO",
-        "module",
-        "keywords"
+        "unwrapped",
+        "promise"
     ],
     "devDependencies": {
         "@rollup/plugin-node-resolve": "13.1.3",
