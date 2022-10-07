@@ -1,9 +1,9 @@
 {
     "version": "0.0.0",
-    "name": "TODO",
-    "umd:name": "TODO",
-    "repository": "TODO_USERNAME/TODO_REPO",
-    "description": "TODO_MODULE_DESCRIPTION",
+    "name": "unwrapped-promise",
+    "umd:name": "unwrapped-promise",
+    "repository": "jdeurt/unwrapped-promise",
+    "description": "A wrapper around native Promises that exposes the internal `status` property",
     "unpkg": "dist/index.min.js",
     "module": "dist/index.mjs",
     "main": "dist/index.js",
@@ -16,8 +16,8 @@
         "url": "https://jdeurt.xyz"
     },
     "files": [
-        "dist",
-        "types"
+        "unwrapped",
+        "promise"
     ],
     "exports": {
         ".": {
