@@ -29,8 +29,6 @@ An unwrapped promise is a wrapper around native promises (yes, I know). Unwrappe
 ### Reading promise status
 
 ```js
-import { UnwrappedPromise } from "unwrapped-promise";
-
 const promise = new UnwrappedPromise((resolve) => setTimeout(resolve, 0));
 
 console.log(promise.status); // "pending"
@@ -43,8 +41,6 @@ console.log(promise.status); // "resolved"
 ### Forcing rejection (aborting promises)
 
 ```js
-import { UnwrappedPromise } from "unwrapped-promise";
-
 const promise = new UnwrappedPromise((resolve, reject) => {
     // ...
 });
@@ -75,6 +71,20 @@ const promise = new UnwrappedPromise((resolve) => setTimeout(resolve, 1000));
 
 await promise.settled; // Resolves in 1 second
 ```
+
+### Creating an `UnwrappedPromise` from a regular `Promise`
+
+```js
+const fetchResultPromise = UnwrappedPromise.from(fetch("/some/endpoint"));
+
+console.log(fetchResultPromise.status); // "pending"
+
+const result = await fetchResultPromise;
+
+console.log(fetchResultPromise.status); // "resolved"
+```
+
+Keep in mind the static `UnwrappedPromise.from` method creates a _copy_ of the promise provided as the argument. Forecefully rejecting or resolving the unwrapped promise has no effect on the status of the original promise.
 
 ## License
 

@@ -52,12 +52,26 @@ describe("Unwrapped promise", () => {
     });
 
     it("Should allow for chaining", async () => {
-        const result1 = new UnwrappedPromise<number>((resolve) =>
+        const result = new UnwrappedPromise<number>((resolve) =>
             setTimeout(() => resolve(0), 0)
         )
             .then((value) => value + 2)
             .then((value) => value * 3);
 
-        expect(await result1).toEqual(6);
+        // expect(result instanceof UnwrappedPromise).toEqual(true);
+        expect(await result).toEqual(6);
+    });
+
+    it("Should allow for chaining with the static .from method", async () => {
+        const result = UnwrappedPromise.from(
+            UnwrappedPromise.from(
+                new UnwrappedPromise<number>((resolve) =>
+                    setTimeout(() => resolve(0), 0)
+                ).then((value) => value + 2)
+            ).then((value) => value * 3)
+        );
+
+        expect(result instanceof UnwrappedPromise).toEqual(true);
+        expect(await result).toEqual(6);
     });
 });

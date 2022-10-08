@@ -31,6 +31,19 @@ export class UnwrappedPromise<T> extends Promise<T> {
     }
 
     /**
+     * Creates a new unwrapped promise from an existing promise
+     */
+    static from<T>(promise: Promise<T>) {
+        const unwrappedPromise = new UnwrappedPromise<T>();
+
+        promise
+            .then((value) => unwrappedPromise.resolve(value))
+            .catch((reason) => unwrappedPromise.reject(reason));
+
+        return unwrappedPromise;
+    }
+
+    /**
      * A promise that resolves whenever the unwrapped promise has settled (fulfilled or rejected)
      */
     get settled() {
@@ -76,13 +89,7 @@ export class UnwrappedPromise<T> extends Promise<T> {
     //         | null
     //         | undefined
     // ): UnwrappedPromise<TResult1 | TResult2> {
-    //     return new UnwrappedPromise((resolve, reject) => {
-    //         super
-    //             .then(onfulfilled)
-    //             .then(resolve)
-    //             .catch(onrejected)
-    //             .then(reject);
-    //     });
+    //     return UnwrappedPromise.from(super.then(onfulfilled, onrejected));
     // }
 
     // catch<TResult = never>(
@@ -91,14 +98,10 @@ export class UnwrappedPromise<T> extends Promise<T> {
     //         | null
     //         | undefined
     // ): UnwrappedPromise<T | TResult> {
-    //     return new UnwrappedPromise((resolve) => {
-    //         super.catch(onrejected).then(resolve);
-    //     });
+    //     return UnwrappedPromise.from(super.catch(onrejected));
     // }
 
     // finally(onfinally?: (() => void) | null | undefined): UnwrappedPromise<T> {
-    //     return new UnwrappedPromise((resolve) => {
-    //         super.finally(onfinally).then(resolve);
-    //     });
+    //     return UnwrappedPromise.from(super.finally(onfinally));
     // }
 }
