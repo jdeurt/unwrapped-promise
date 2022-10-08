@@ -6,5 +6,9 @@
         "prettier",
         "plugin:unicorn/recommended",
         "plugin:@typescript-eslint/recommended"
-    ]
+    ],
+
+    "rules": {
+        "@typescript-eslint/ban-ts-comment": false
+    }
 }
