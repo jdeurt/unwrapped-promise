@@ -1,10 +1,15 @@
 # unwrapped-promise
 
+[![Version](https://img.shields.io/npm/v/unwrapped-promise.svg)](https://www.npmjs.com/package/unwrapped-promise)
+![Prerequisite](https://img.shields.io/badge/node-%3E%3D16-blue.svg)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](#)
+
+> An extension of Javascript's native Promise class that gives you more control over its lifecycle
+
 ## Table of contents
 
 -   [Intstallation](#installation)
 -   [Usage](#usage)
-    -   [Basic usage](#basic-usage)
     -   [Reading promise status](#reading-promise-status)
     -   [Forcing rejection (aborting promises)](#forcing-rejection-aborting-promises)
     -   [Flat promise behavior](#flat-promise-behavior)
@@ -32,8 +37,6 @@ yarn i unwrapped-promise
 
 ## Usage
 
-### Basic usage
-
 ```js
 import { UnwrappedPromise } from "unwrapped-promise";
 
@@ -42,7 +45,7 @@ const promise = new UnwrappedPromise((resolve, reject) => {
 });
 ```
 
-An unwrapped promise is a wrapper around native promises (yes, I know). Unwrapped promises expose some methods and properties that are usually unaccessible after creating a new promise.
+An unwrapped promise is an extension of native promises. Unwrapped promises expose some methods and properties that give you more control the promise's lifecycle. They also come with some nifty utility functions that make common promise patterns easier to work with.
 
 ### Reading promise status
 
