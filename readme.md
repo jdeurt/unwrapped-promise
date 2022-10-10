@@ -116,6 +116,19 @@ console.log(fetchResultPromise.status); // undefined
 const result = await fetchResultPromise; // works as normal :)
 ```
 
+### Resolving from a callback
+
+```js
+import { readFile } from "node:fs";
+import { UnwrappedPromise } from "unwrapped-promise";
+
+const dataPromise = new UnwrappedPromise<string>();
+
+readFile("/path/to/file.txt", "utf8", dataPromise.makeCallbackResolver);
+
+const data = await dataPromise;
+```
+
 ### Timer utilities
 
 Creating a promise that will automatically time out after 5 seconds:

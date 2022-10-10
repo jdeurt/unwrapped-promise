@@ -139,6 +139,36 @@ export class UnwrappedPromise<T> extends Promise<T> {
     }
 
     /**
+     * Returns a function that can be fed into the callback argument of another function to automatically resolve or reject the unwrapped promise
+     *
+     * The default returned function assumes the type signature of the callback is `(error: unknown, result: T) => void` but this behavior can be modified by passing a custom `callbackArgumentsTransformer`
+     */
+    makeCallbackResolver<
+        F extends Function = (error: unknown, result: T) => void
+    >(
+        callbackArgumentsTransformer?: (...args: any[]) => {
+            error: unknown;
+            result: T;
+        }
+    ): F {
+        const resolver = (...args: any[]) => {
+            const { error, result } = callbackArgumentsTransformer?.(
+                ...args
+            ) ?? { error: args[0], result: args[1] as T };
+
+            if (error) {
+                this.reject(error);
+
+                return;
+            }
+
+            this.resolve(result);
+        };
+
+        return resolver as unknown as F;
+    }
+
+    /**
      * Returns a normal promise representation of the unwrapped promise
      */
     rewrap(): Promise<T> {

@@ -74,4 +74,20 @@ describe("Unwrapped promise", () => {
         expect(result instanceof UnwrappedPromise).toEqual(true);
         expect(await result).toEqual(6);
     });
+
+    it("Should play well with callbacks", async () => {
+        const p = new UnwrappedPromise();
+
+        ((num: number, cb: (num: number) => void) => {
+            setTimeout(() => cb(num + 1));
+        })(
+            1,
+            p.makeCallbackResolver((...args) => ({
+                error: undefined,
+                result: args[0],
+            }))
+        );
+
+        expect(await p).toEqual(2);
+    });
 });
