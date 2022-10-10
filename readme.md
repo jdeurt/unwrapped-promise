@@ -1,5 +1,21 @@
 # unwrapped-promise
 
+## Table of contents
+
+-   [Intstallation](#installation)
+-   [Usage](#usage)
+    -   [Basic usage](#basic-usage)
+    -   [Reading promise status](#reading-promise-status)
+    -   [Forcing rejection (aborting promises)](#forcing-rejection-aborting-promises)
+    -   [Flat promise behavior](#flat-promise-behavior)
+    -   [Waiting for settlement](#waiting-for-settlement)
+    -   [Creating an `UnwrappedPromise` from a regular `Promise`](#creating-an-unwrappedpromise-from-a-regular-promise)
+    -   ["Re-wrapping" a promise](#re-wrapping-a-promise)
+    -   [Resolving from a callback](#resolving-from-a-callback)
+    -   [Timer utilities](#timer-utilities)
+-   [Examples](#examples)
+-   [License](#license)
+
 ## Installation
 
 ### NPM
@@ -15,6 +31,8 @@ yarn i unwrapped-promise
 ```
 
 ## Usage
+
+### Basic usage
 
 ```js
 import { UnwrappedPromise } from "unwrapped-promise";
@@ -159,10 +177,6 @@ await unwrappedPromise.catch((err) => console.log("Timed out!"));
 ## Examples
 
 You can check out some more complex usage examples [here](https://github.com/jdeurt/unwrapped-promise/tree/main/examples).
-
-## `Promise` patterns with `UnwrappedPromise`
-
-###
 
 ## License
 
