@@ -122,7 +122,7 @@ const result = await fetchResultPromise; // works as normal :)
 import { readFile } from "node:fs";
 import { UnwrappedPromise } from "unwrapped-promise";
 
-const dataPromise = new UnwrappedPromise<string>();
+const dataPromise = new UnwrappedPromise();
 
 readFile("/path/to/file.txt", "utf8", dataPromise.makeCallbackResolver);
 
