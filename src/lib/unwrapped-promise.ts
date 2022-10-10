@@ -38,10 +38,6 @@ export class UnwrappedPromise<T> extends Promise<T> {
         return unwrappedPromise;
     }
 
-    get [Symbol.toStringTag]() {
-        return "UnwrappedPromise";
-    }
-
     /**
      * A promise that resolves whenever the unwrapped promise has settled (fulfilled or rejected)
      */
