@@ -10,27 +10,40 @@ function getRandomInt(ceil) {
 const promises = [];
 
 for (let i = 0; i < 100; i++) {
-    promises.push(
+    promises.push([
         new UnwrappedPromise((resolve) => {
-            setTimeout(resolve, getRandomInt(5000) + 100);
-        })
-    );
+            setTimeout(resolve, getRandomInt(500) + 10);
+        }),
+        new UnwrappedPromise((resolve) => {
+            setTimeout(resolve, getRandomInt(500) + 100);
+        }),
+    ]);
 }
 
 function tick() {
     setTimeout(() => {
-        if (promises.every((p) => p.status === "resolved")) {
+        if (
+            promises.every(
+                (p) => p[0].status === "resolved" && p[1].status === "resolved"
+            )
+        ) {
             return;
         }
 
         console.log(
-            `[${promises
-                .map((p) => (p.status === "resolved" ? "=" : "-"))
-                .join("")}]`
+            promises
+                .map((p) =>
+                    p[1].status === "resolved"
+                        ? "▓"
+                        : p[0].status === "resolved"
+                        ? "▒"
+                        : "░"
+                )
+                .join("")
         );
 
         tick();
-    }, 100);
+    }, 10);
 }
 
 tick();
