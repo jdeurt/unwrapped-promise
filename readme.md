@@ -29,6 +29,8 @@ An unwrapped promise is a wrapper around native promises (yes, I know). Unwrappe
 ### Reading promise status
 
 ```js
+import { UnwrappedPromise } from "unwrapped-promise";
+
 const promise = new UnwrappedPromise((resolve) => setTimeout(resolve, 0));
 
 console.log(promise.status); // "pending"
@@ -41,6 +43,8 @@ console.log(promise.status); // "resolved"
 ### Forcing rejection (aborting promises)
 
 ```js
+import { UnwrappedPromise } from "unwrapped-promise";
+
 const promise = new UnwrappedPromise((resolve, reject) => {
     // ...
 });
@@ -55,6 +59,8 @@ externalSource.on("someEvent", () => {
 ### Flat promise behavior
 
 ```js
+import { UnwrappedPromise } from "unwrapped-promise";
+
 const flatPromise = new UnwrappedPromise();
 
 flatPromise.then(() => console.log("Resolved!"));
@@ -67,6 +73,8 @@ await flatPromise; // "Resolved!"
 ### Waiting for settlement
 
 ```js
+import { UnwrappedPromise } from "unwrapped-promise";
+
 const promise = new UnwrappedPromise((resolve) => setTimeout(resolve, 1000));
 
 await promise.settled; // Resolves in 1 second
@@ -75,6 +83,8 @@ await promise.settled; // Resolves in 1 second
 ### Creating an `UnwrappedPromise` from a regular `Promise`
 
 ```js
+import { UnwrappedPromise } from "unwrapped-promise";
+
 const fetchResultPromise = UnwrappedPromise.from(fetch("/some/endpoint"));
 
 console.log(fetchResultPromise.status); // "pending"
