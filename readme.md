@@ -96,6 +96,10 @@ console.log(fetchResultPromise.status); // "resolved"
 
 Keep in mind the static `UnwrappedPromise.from` method creates a _copy_ of the promise provided as the argument. Forecefully rejecting or resolving the unwrapped promise has no effect on the status of the original promise.
 
+## Examples
+
+You can check out some more complex usage examples [here](https://github.com/jdeurt/unwrapped-promise/tree/main/examples).
+
 ## License
 
 MIT © [Juan de Urtubey](https://jdeurt.xyz)

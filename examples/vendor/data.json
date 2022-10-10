@@ -1,0 +1,6 @@
+{
+    "number": 1234,
+    "string": "Hello World",
+    "boolean": true,
+    "object": {}
+}
