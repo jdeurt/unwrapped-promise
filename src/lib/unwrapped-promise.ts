@@ -1,9 +1,7 @@
 export class UnwrappedPromise<T> extends Promise<T> {
-    private unwrappedProperties: {
-        resolve: (value: T | PromiseLike<T>) => void;
-        reject: (reason?: unknown) => void;
-        status: "pending" | "resolved" | "rejected";
-    };
+    private unwrappedResolve: (value: T | PromiseLike<T>) => void;
+    private unwrappedReject: (reason?: unknown) => void;
+    private unwrappedStatus: "pending" | "resolved" | "rejected" = "pending";
 
     constructor(
         executor?: (
@@ -11,19 +9,16 @@ export class UnwrappedPromise<T> extends Promise<T> {
             reject: (reason?: unknown) => void
         ) => void
     ) {
-        let unwrappedResolve: (value: T | PromiseLike<T>) => void;
-        let unwrappedReject: (reason?: unknown) => void;
+        let _unwrappedResolve: (value: T | PromiseLike<T>) => void;
+        let _unwrappedReject: (reason?: unknown) => void;
 
         super((resolve, reject) => {
-            unwrappedResolve = resolve;
-            unwrappedReject = reject;
+            _unwrappedResolve = resolve;
+            _unwrappedReject = reject;
         });
 
-        this.unwrappedProperties = {
-            resolve: unwrappedResolve!,
-            reject: unwrappedReject!,
-            status: "pending",
-        };
+        this.unwrappedResolve = _unwrappedResolve!;
+        this.unwrappedReject = _unwrappedReject!;
 
         if (executor !== undefined) {
             executor(this.resolve.bind(this), this.reject.bind(this));
@@ -33,7 +28,7 @@ export class UnwrappedPromise<T> extends Promise<T> {
     /**
      * Creates a new unwrapped promise from an existing promise
      */
-    static from<T>(promise: Promise<T>) {
+    static from<T>(promise: Promise<T>): UnwrappedPromise<T> {
         const unwrappedPromise = new UnwrappedPromise<T>();
 
         promise
@@ -46,62 +41,65 @@ export class UnwrappedPromise<T> extends Promise<T> {
     /**
      * A promise that resolves whenever the unwrapped promise has settled (fulfilled or rejected)
      */
-    get settled() {
-        return new Promise<void>((resolve) => {
-            super
-                .then((value) => resolve(void value))
-                .catch((err) => resolve(void err));
+    get settled(): Promise<void> {
+        return new Promise((resolve) => {
+            super.finally(() => resolve());
         });
     }
 
     /**
      * The status of the unwrapped promise
      */
-    get status() {
-        return this.unwrappedProperties.status;
+    get status(): "pending" | "resolved" | "rejected" {
+        return this.unwrappedStatus;
     }
 
     /**
-     * Forces the unwrapped promise to resolve to a specified value
+     * Creates a new resolved unwrapped promise.
      */
-    resolve(value: T | PromiseLike<T>): void {
-        this.unwrappedProperties.resolve(value);
-        this.unwrappedProperties.status = "resolved";
+    static resolve(): UnwrappedPromise<void>;
+    /**
+     * Creates a new resolved unwrapped promise for the provided value.
+     */
+    static resolve<T>(value: T | PromiseLike<T>): UnwrappedPromise<T>;
+    static resolve<T>(value?: T | PromiseLike<T>) {
+        return arguments.length === 0
+            ? new UnwrappedPromise<void>().resolve()
+            : new UnwrappedPromise<T>().resolve(value!);
     }
 
     /**
-     * Forces the unwrapped promise to reject with a specified reason
+     * Forces the unwrapped promise to resolve to a provided value
      */
-    reject(reason?: unknown): void {
-        this.unwrappedProperties.reject(reason);
-        this.unwrappedProperties.status = "rejected";
+    resolve(value: T | PromiseLike<T>): UnwrappedPromise<T> {
+        if (this.unwrappedStatus !== "pending") {
+            return this;
+        }
+
+        this.unwrappedResolve(value);
+        this.unwrappedStatus = "resolved";
+
+        return this;
     }
 
-    // TODO
+    /**
+     * Creates a new rejected unwrapped promise for the provided reason.
+     */
+    static reject<T = never>(reason?: unknown): UnwrappedPromise<T> {
+        return new UnwrappedPromise<T>().reject(reason);
+    }
 
-    // then<TResult1 = T, TResult2 = never>(
-    //     onfulfilled?:
-    //         | ((value: T) => TResult1 | PromiseLike<TResult1>)
-    //         | null
-    //         | undefined,
-    //     onrejected?:
-    //         | ((reason: any) => TResult2 | PromiseLike<TResult2>)
-    //         | null
-    //         | undefined
-    // ): UnwrappedPromise<TResult1 | TResult2> {
-    //     return UnwrappedPromise.from(super.then(onfulfilled, onrejected));
-    // }
+    /**
+     * Forces the unwrapped promise to reject with a provided reason
+     */
+    reject(reason?: unknown): UnwrappedPromise<T> {
+        if (this.unwrappedStatus !== "pending") {
+            return this;
+        }
 
-    // catch<TResult = never>(
-    //     onrejected?:
-    //         | ((reason: any) => TResult | PromiseLike<TResult>)
-    //         | null
-    //         | undefined
-    // ): UnwrappedPromise<T | TResult> {
-    //     return UnwrappedPromise.from(super.catch(onrejected));
-    // }
+        this.unwrappedReject(reason);
+        this.unwrappedStatus = "rejected";
 
-    // finally(onfinally?: (() => void) | null | undefined): UnwrappedPromise<T> {
-    //     return UnwrappedPromise.from(super.finally(onfinally));
-    // }
+        return this;
+    }
 }
