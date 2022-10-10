@@ -1,16 +1,19 @@
-export class UnwrappedPromise<T> extends Promise<T> {
-    private unwrappedResolve: (value: T | PromiseLike<T>) => void;
-    private unwrappedReject: (reason?: unknown) => void;
-    private unwrappedStatus: "pending" | "resolved" | "rejected" = "pending";
+export type PromiseResolver<T> = (value: T | PromiseLike<T>) => void;
+export type PromiseRejector = (reason?: unknown) => void;
+export type PromiseExecutor<T> = (
+    resolve: (value: T | PromiseLike<T>) => void,
+    reject: (reason?: unknown) => void
+) => void;
+export type PromiseStatus = "pending" | "resolved" | "rejected";
 
-    constructor(
-        executor?: (
-            resolve: (value: T | PromiseLike<T>) => void,
-            reject: (reason?: unknown) => void
-        ) => void
-    ) {
-        let _unwrappedResolve: (value: T | PromiseLike<T>) => void;
-        let _unwrappedReject: (reason?: unknown) => void;
+export class UnwrappedPromise<T> extends Promise<T> {
+    private unwrappedResolve: PromiseResolver<T>;
+    private unwrappedReject: PromiseRejector;
+    private unwrappedStatus: PromiseStatus = "pending";
+
+    constructor(executor?: PromiseExecutor<T>) {
+        let _unwrappedResolve: PromiseResolver<T>;
+        let _unwrappedReject: PromiseRejector;
 
         super((resolve, reject) => {
             _unwrappedResolve = resolve;
@@ -36,6 +39,38 @@ export class UnwrappedPromise<T> extends Promise<T> {
             .catch((reason) => unwrappedPromise.reject(reason));
 
         return unwrappedPromise;
+    }
+
+    /**
+     * Creates a new unwrapped promise that automatically rejects after the provided amount of time
+     */
+    static withTimeout<T>(
+        ms: number,
+        executor?: PromiseExecutor<T>
+    ): UnwrappedPromise<T>;
+    /**
+     * Creates a new unwrapped promise from an existing promise that automatically rejects after the provided amount of time
+     */
+    static withTimeout<T>(ms: number, promise: Promise<T>): UnwrappedPromise<T>;
+    static withTimeout<T>(
+        ms: number,
+        promiseOrExecutor?: Promise<T> | PromiseExecutor<T>
+    ): UnwrappedPromise<T> {
+        const promise =
+            promiseOrExecutor instanceof Promise
+                ? UnwrappedPromise.from(promiseOrExecutor)
+                : new UnwrappedPromise<T>(promiseOrExecutor);
+
+        setTimeout(promise.reject, ms);
+
+        return promise;
+    }
+
+    /**
+     * Creates a new unwrapped promise that resolves after the provided amount of time
+     */
+    static timer(ms: number): UnwrappedPromise<void> {
+        return new UnwrappedPromise((resolve) => setTimeout(resolve, ms));
     }
 
     /**

@@ -4,7 +4,7 @@ describe("Unwrapped promise", () => {
     it("Should behave like a regular promise", async () => {
         const now = Date.now();
 
-        await new UnwrappedPromise((resolve) => setTimeout(resolve, 100));
+        await UnwrappedPromise.timer(100);
 
         const later = Date.now();
 

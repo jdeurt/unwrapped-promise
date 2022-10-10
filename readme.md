@@ -116,9 +116,40 @@ console.log(fetchResultPromise.status); // undefined
 const result = await fetchResultPromise; // works as normal :)
 ```
 
+### Timer utilities
+
+Creating a promise that will automatically time out after 5 seconds:
+
+```js
+import { UnwrappedPromise } from "unwrapped-promise";
+
+const promise = new Promise((resolve) => setTimeout(resolve, 10000));
+
+const unwrappedPromise = UnwrappedPromise.withTimeout(5000, promise);
+
+// Logs "Timed out!" after 5 seconds
+await unwrappedPromise.catch((err) => console.log("Timed out!"));
+```
+
+Alternative approach with `UnwrappedPromise.timer`:
+
+```js
+import { UnwrappedPromise } from "unwrapped-promise";
+
+const unwrappedPromise = UnwrappedPromise.timer(10000);
+setTimeout(unwrappedPromise.reject, 5000);
+
+// Logs "Timed out!" after 5 seconds
+await unwrappedPromise.catch((err) => console.log("Timed out!"));
+```
+
 ## Examples
 
 You can check out some more complex usage examples [here](https://github.com/jdeurt/unwrapped-promise/tree/main/examples).
+
+## `Promise` patterns with `UnwrappedPromise`
+
+###
 
 ## License
 
