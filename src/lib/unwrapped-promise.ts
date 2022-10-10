@@ -102,4 +102,11 @@ export class UnwrappedPromise<T> extends Promise<T> {
 
         return this;
     }
+
+    /**
+     * Returns a normal promise representation of the unwrapped promise
+     */
+    rewrap(): Promise<T> {
+        return this.then();
+    }
 }

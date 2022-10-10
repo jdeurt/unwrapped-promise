@@ -5,7 +5,7 @@ class Data {
     /**
      * @type {UnwrappedPromise}
      */
-    #status;
+    #ready;
 
     /**
      * @type {Record<string, unknown> | undefined}
@@ -15,18 +15,18 @@ class Data {
     #path;
 
     constructor(path) {
-        this.#status = new UnwrappedPromise();
+        this.#ready = new UnwrappedPromise();
         this.#data = undefined;
         this.#path = path;
 
         readFile(path, "utf8", (err, data) => {
             if (err) {
-                this.#status.reject(err);
+                this.#ready.reject(err);
 
                 return;
             }
 
-            this.#status.resolve();
+            this.#ready.resolve();
             this.#data = JSON.parse(data);
         });
     }
@@ -40,7 +40,7 @@ class Data {
     }
 
     get ready() {
-        return this.#status.then();
+        return this.#ready.rewrap();
     }
 }
 

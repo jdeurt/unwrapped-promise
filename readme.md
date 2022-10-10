@@ -96,6 +96,26 @@ console.log(fetchResultPromise.status); // "resolved"
 
 Keep in mind the static `UnwrappedPromise.from` method creates a _copy_ of the promise provided as the argument. Forecefully rejecting or resolving the unwrapped promise has no effect on the status of the original promise.
 
+### "Re-wrapping" a promise
+
+You can get the normal promise representation of an unwrapped promise by calling `.rewrap()`.
+
+```js
+import { UnwrappedPromise } from "unwrapped-promise";
+
+const fetchResultUnwrappedPromise = UnwrappedPromise.from(
+    fetch("/some/endpoint")
+);
+
+console.log(fetchResultUnwrappedPromise.status); // "pending"
+
+const fetchResultPromise = fetchResultUnwrappedPromise.rewrap();
+
+console.log(fetchResultPromise.status); // undefined
+
+const result = await fetchResultPromise; // works as normal :)
+```
+
 ## Examples
 
 You can check out some more complex usage examples [here](https://github.com/jdeurt/unwrapped-promise/tree/main/examples).
