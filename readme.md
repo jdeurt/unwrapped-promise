@@ -143,11 +143,9 @@ const result = await fetchResultPromise; // works as normal :)
 import { readFile } from "node:fs";
 import { UnwrappedPromise } from "unwrapped-promise";
 
-const dataPromise = new UnwrappedPromise();
-
-readFile("/path/to/file.txt", "utf8", dataPromise.makeCallbackResolver);
-
-const data = await dataPromise;
+const data = await UnwrappedPromise.fromHandler((handle) => {
+    readFile("/path/to/file.txt", "utf8", handle);
+});
 ```
 
 ### Timer utilities

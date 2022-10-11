@@ -49,6 +49,12 @@ describe("Unwrapped promise", () => {
 
         expect(status1).toEqual("pending");
         expect(status2).toEqual("resolved");
+
+        const uP2 = UnwrappedPromise.from(Promise.resolve());
+
+        await uP2;
+
+        expect(uP2.status).toEqual("resolved");
     });
 
     it("Should allow for chaining", async () => {
@@ -76,16 +82,18 @@ describe("Unwrapped promise", () => {
     });
 
     it("Should play well with callbacks", async () => {
-        const p = new UnwrappedPromise();
-
-        ((num: number, cb: (num: number) => void) => {
+        const mockCallback = (num: number, cb: (num: number) => void) => {
             setTimeout(() => cb(num + 1));
-        })(
-            1,
-            p.makeCallbackResolver((...args) => ({
-                error: undefined,
-                result: args[0],
-            }))
+        };
+
+        const p = UnwrappedPromise.fromCallback<
+            number,
+            (result: number) => void
+        >(
+            (handler) => {
+                mockCallback(1, handler);
+            },
+            (...args) => ({ error: undefined, result: args[0] })
         );
 
         expect(await p).toEqual(2);
