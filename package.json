@@ -3,7 +3,7 @@
     "name": "unwrapped-promise",
     "umd:name": "unwrapped-promise",
     "repository": "jdeurt/unwrapped-promise",
-    "description": "A wrapper around native Promises that exposes the internal `status` property",
+    "description": "An extension of Javascript's native Promise class that gives you more control over its lifecycle",
     "unpkg": "dist/index.min.js",
     "module": "dist/index.mjs",
     "main": "dist/index.js",
