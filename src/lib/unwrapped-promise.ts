@@ -1,10 +1,7 @@
-export type PromiseResolver<T> = (value: T | PromiseLike<T>) => void;
-export type PromiseRejector = (reason?: unknown) => void;
-export type PromiseExecutor<T> = (
-    resolve: (value: T | PromiseLike<T>) => void,
-    reject: (reason?: unknown) => void
-) => void;
-export type PromiseStatus = "pending" | "resolved" | "rejected";
+import { PromiseExecutor } from "../types/promise-executor";
+import { PromiseRejector } from "../types/promise-rejector";
+import { PromiseResolver } from "../types/promise-resolver";
+import { PromiseStatus } from "../types/promise-status";
 
 export class UnwrappedPromise<T> extends Promise<T> {
     private unwrappedResolve: PromiseResolver<T>;
